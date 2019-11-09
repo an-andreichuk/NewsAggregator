@@ -1,9 +1,5 @@
 # NewsAggregator
 
-Clone repository and add dependencies:
-MongoDB.Driver -Version 2.10.0
-HangFire.Core -Version 1.7.7
-
 База данных: MongoDB Atlas, бесплатная версия, так что лимит - 512 мб. NoSQL.
 Основной проект на ASP.NET Core (C#, MVC). Из базы данных берется информация, анализируется и отправляется пользователю.
 
