@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace NewsAggregator.Models
 {
@@ -12,5 +13,9 @@ namespace NewsAggregator.Models
         public string Text { get; private set; }
         public string SourceUrl { get; private set; }
         public BsonDateTime TimeSourcePublished { get; private set; }
+        [BsonIgnore]
+        public List<string> KeyWords { get; set; }
+        [BsonIgnore]
+        public List<string> DuplicateUrls { get; set; }
     }
 }

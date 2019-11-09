@@ -1,0 +1,23 @@
+﻿@model NewsAggregator.Models.NewsEntry
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Title)</h4>
+    <hr />
+    @Html.DisplayFor(model => model.Text)
+
+    <dl class="dl-horizontal">
+        <dt>
+            Оригінал:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SourceUrl)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Назад до новин</a>
+</div>
