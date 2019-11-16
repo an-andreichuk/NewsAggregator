@@ -23,7 +23,10 @@ namespace NewsAggregator.Models
 
                 _news.Add(_mongoDb.GetCollection<NewsEntry>("pravda.com.ua"));
                 _news.Add(_mongoDb.GetCollection<NewsEntry>("tsn.ua"));
-                
+                _news.Add(_mongoDb.GetCollection<NewsEntry>("unian.ua"));
+                _news.Add(_mongoDb.GetCollection<NewsEntry>("hromadske.ua"));
+                _news.Add(_mongoDb.GetCollection<NewsEntry>("bbc.com/ukrainian/news"));
+
                 return _news;
             }
         }
