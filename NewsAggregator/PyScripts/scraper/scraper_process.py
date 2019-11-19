@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import scrapy
 from scrapy.crawler import CrawlerProcess
 import time
