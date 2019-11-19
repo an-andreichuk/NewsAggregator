@@ -41,10 +41,10 @@ class QuotesSpider(scrapy.Spider):
             SourceUrl = response.request.url
             TimeSourcePublished = datetime.datetime.utcnow()
 
-            if len(response.xpath('//h1[@class="post_news__title"]/text()').extract()) == 0:
-                Title = response.xpath('//h1[@class="post__title"]/text()').extract()[0]
-            elif len(response.xpath('//h1[@class="post_news__title"]/text()').extract()) == 0:
+            if len(response.xpath('//h1[@class="post_news__title"]/text()').extract()) != 0:
                 Title = response.xpath('//h1[@class="post_news__title"]/text()').extract()[0]
+            elif len(response.xpath('//h1[@class="post_news__title"]/text()').extract()) != 0:
+                Title = response.xpath('//h1[@class="post__title"]/text()').extract()[0]
             
             for x in response.xpath('//div/p//text()').extract():
                 Text += x 
@@ -60,7 +60,7 @@ class QuotesSpider(scrapy.Spider):
 process = CrawlerProcess(get_project_settings())
 def _crawl(result, spider):
     deferred = process.crawl(spider)
-    time.sleep(3600)
+    time.sleep(1)
     deferred.addCallback(_crawl, spider)
     return deferred
 
