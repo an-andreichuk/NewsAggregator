@@ -25,30 +25,32 @@ class QuotesSpider(scrapy.Spider):
     
     def parse(self, response):
         if response.request.url in checked_news:
-            return 0 
+            return
         if response.request.url in self.urls:
             for x in response.xpath('//div[@class="article__title"]//a/@href').extract():
                 if len(x) > 0 and x[0] == '/':
                 	x = domain + x
                 news_urls.append(x);
 
-        else:
-            client = MongoClient('mongodb+srv://writer:writer-pass-123@cluster0-kgt9l.azure.mongodb.net/test?retryWrites=true&w=majority')
-            db = client['News']
-            collection = db['pravda.com.ua']
-            
+        else:            
             Text = ""
             Title = ""
             SourceUrl = response.request.url
             TimeSourcePublished = datetime.datetime.utcnow()
 
-            if len(response.xpath('//h1[@class="post_news__title"]/text()').extract()) != 0:
-                Title = response.xpath('//h1[@class="post_news__title"]/text()').extract()[0]
-            elif len(response.xpath('//h1[@class="post_news__title"]/text()').extract()) != 0:
-                Title = response.xpath('//h1[@class="post__title"]/text()').extract()[0]
-            
+            if len(response.xpath('//h1[@class="post_news__title"]').extract()) != 0:
+                Title = response.xpath('//h1[@class="post_news__title"]').extract()[0]
+            elif len(response.xpath('//h1[@class="post_news__title"]').extract()) != 0:
+                Title = response.xpath('//h1[@class="post__title"]').extract()[0]
+            else:
+            	return
+
             for x in response.xpath('//div/p//text()').extract():
                 Text += x 
+
+            client = MongoClient('mongodb+srv://writer:writer-pass-123@cluster0-kgt9l.azure.mongodb.net/test?retryWrites=true&w=majority')
+            db = client['News']
+            collection = db['pravda.com.ua']
             
             collection.insert_one({'Title': Title,
                 'Text': Text,
@@ -63,11 +65,11 @@ counter = 0
 
 def _crawl(result, spider):
     global counter
-    
+
     if counter > 1:
         time.sleep(3000)
 
-    counter+= counter
+    counter+= 1
     deferred = process.crawl(spider)
     deferred.addCallback(_crawl, spider)
     return deferred
