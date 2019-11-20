@@ -62,11 +62,12 @@ process = CrawlerProcess(get_project_settings())
 counter = 0
 
 def _crawl(result, spider):
-
+    global counter
+    
     if counter > 1:
         time.sleep(3000)
 
-    counter+=1
+    counter+= counter
     deferred = process.crawl(spider)
     deferred.addCallback(_crawl, spider)
     return deferred
