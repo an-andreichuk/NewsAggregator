@@ -13,9 +13,12 @@
 **BSON:**
 
     {
-        "_id": ObjectId
+        "_id": ObjectId,
         "Title": "string",
         "Text": "string",
+        "Tags": [
+            "string"
+        ],
         "SourceUrl": "string",
         "TimeSourcePublished": BsonDate,
         "KeyWords": [
