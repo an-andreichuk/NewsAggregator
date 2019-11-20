@@ -59,9 +59,15 @@ class QuotesSpider(scrapy.Spider):
 
 
 process = CrawlerProcess(get_project_settings())
+counter = 0
+
 def _crawl(result, spider):
+
+    if counter > 1:
+        time.sleep(3000)
+
+    counter+=1
     deferred = process.crawl(spider)
-    time.sleep(3600)
     deferred.addCallback(_crawl, spider)
     return deferred
 
