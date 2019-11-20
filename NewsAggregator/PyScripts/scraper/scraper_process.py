@@ -7,7 +7,7 @@ from twisted.internet.task import deferLater
 import pymongo
 from pymongo import MongoClient
 import datetime
-from datetime import timedelta, datetime, tzinfo, timezone
+from datetime import timedelta, datetime, tzinfo
 from scrapy.utils.project import get_project_settings
 
 news_urls = []
@@ -25,14 +25,11 @@ class QuotesSpider(scrapy.Spider):
         self.urls = [
             'https://www.pravda.com.ua'
         ]
-        
-        for url in news_urls + self.urls:
+        not_scraped = list(set(news_urls) - set(checked_news))
+        for url in not_scraped + self.urls:
             yield scrapy.Request(url=url, callback=self.parse)
     
-    def parse(self, response):
-        if response.request.url in checked_news:
-            return
-        
+    def parse(self, response):        
         if response.request.url in self.urls:
             for x in response.xpath('//div[@class="article__title"]//a/@href').extract():
                 if len(x) > 0 and x[0] == '/':
@@ -65,7 +62,7 @@ class QuotesSpider(scrapy.Spider):
                 'TimeSourcePublished': TimeSourcePublished,
                 'Tags':Tags})
         
-        checked_news.append(response.request.url)
+            checked_news.append(response.request.url)
 
 
 process = CrawlerProcess(get_project_settings())
