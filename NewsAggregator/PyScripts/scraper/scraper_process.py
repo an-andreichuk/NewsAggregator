@@ -4,6 +4,7 @@ import scrapy
 import time
 import pymongo
 import datetime
+import utils
 from scrapy.crawler import CrawlerProcess
 from twisted.internet import reactor
 from twisted.internet.task import deferLater
@@ -19,32 +20,6 @@ client = MongoClient(
     'mongodb+srv://writer:writer-pass-123@cluster0-kgt9l.azure.mongodb.net/test?retryWrites=true&w=majority')
 db = client['News']
 collection = db['pravda.com.ua']
-
-def get_checked_news():
-    res = []
-    query_response = collection.find({}, {'SourceUrl':1, '_id':0})
-    for x in query_response:
-        res.append(x['SourceUrl'])
-    return res
-
-def normalize(text_strings):
-    """
-    Normalizes text strings which start/end with the following symbols: ':', '.', ',' or whitespace.
-    For example, concatenates next line, that starts with comma. with previous line
-    or concatenates previous line, that ends with whitespace, with next line.
-    :param text_strings: list of strings to be normalized
-    :return: list of normalized strings
-    """
-    joined = "Δ".join(text_strings)
-    joined = re.sub("(Δ)*(,)(Δ)*", r"\2", joined)
-    joined = re.sub("(Δ)*(:)(Δ)*", r"\2", joined)
-    joined = re.sub("(Δ)(.)(Δ)", r"\2\n", joined)
-    joined = re.sub("Δ\s", " ", joined)
-    joined = re.sub("\sΔ", " ", joined)
-    joined = re.sub("Δ", "\n", joined)
-    splited = joined.split("\n")
-    final = [x.strip() for x in splited if x]
-    return final
 
 
 class QuotesSpider(scrapy.Spider):
@@ -77,7 +52,7 @@ class QuotesSpider(scrapy.Spider):
             else:
                 return
             text_parts = response.xpath('//div[@class="post_news__text"]/p//text()').extract()
-            normalized_article_strings = normalize(text_parts)
+            normalized_article_strings = utils.normalize(text_parts)
             Text = "\n".join(normalized_article_strings)
             for x in response.xpath('//span[@class="post__tags__item"]/a/text()').extract():
                 Tags.append(x)
@@ -93,7 +68,9 @@ class QuotesSpider(scrapy.Spider):
 
 process = CrawlerProcess(get_project_settings())
 counter = 0
-checked_news = get_checked_news()
+checked_news = utils.get_checked_news(collection)
+
+print(checked_news)
 
 def _crawl(result, spider):
     global counter
