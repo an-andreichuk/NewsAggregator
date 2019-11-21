@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import re
 import scrapy
-from scrapy.crawler import CrawlerProcess
 import time
+import pymongo
+import datetime
+from scrapy.crawler import CrawlerProcess
 from twisted.internet import reactor
 from twisted.internet.task import deferLater
-import pymongo
 from pymongo import MongoClient
-import datetime
 from datetime import timedelta, datetime, tzinfo
 from scrapy.utils.project import get_project_settings
 
@@ -20,6 +20,12 @@ client = MongoClient(
 db = client['News']
 collection = db['pravda.com.ua']
 
+def get_checked_news():
+    res = []
+    query_response = collection.find({}, {'SourceUrl':1, '_id':0})
+    for x in query_response:
+        res.append(x['SourceUrl'])
+    return res
 
 def normalize(text_strings):
     """
@@ -71,10 +77,6 @@ class QuotesSpider(scrapy.Spider):
             else:
                 return
             text_parts = response.xpath('//div[@class="post_news__text"]/p//text()').extract()
-            # for x in text_parts:
-            #     Text.replace('\n', '')
-            #     Text += x
-            #     Text += '\n'
             normalized_article_strings = normalize(text_parts)
             Text = "\n".join(normalized_article_strings)
             for x in response.xpath('//span[@class="post__tags__item"]/a/text()').extract():
@@ -91,7 +93,7 @@ class QuotesSpider(scrapy.Spider):
 
 process = CrawlerProcess(get_project_settings())
 counter = 0
-
+checked_news = get_checked_news()
 
 def _crawl(result, spider):
     global counter
