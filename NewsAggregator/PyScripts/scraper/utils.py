@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 import re
 
 def get_checked_news(collection):
