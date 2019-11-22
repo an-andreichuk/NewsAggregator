@@ -12,7 +12,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "GOOGLE_APPLICATION_CREDENTIALS": "D:\\projects\\Repos\\NewsAggregator\\NewsAggregator\\newsaggregator-259818-2978ff5bf68a.json",
+        "GOOGLE_APPLICATION_CREDENTIALS": "D:\\projects\\Repos\\NewsAggregator\\NewsAggregator\\NewsAggregator-b655a5f91fea.json",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

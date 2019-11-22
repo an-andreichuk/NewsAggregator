@@ -2,7 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="newsaggregator-259818-2978ff5bf68a.json" />
+    <Content Remove="NewsAggregator-b655a5f91fea.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Google.Cloud.Translation.V2" Version="1.2.0-beta02" />

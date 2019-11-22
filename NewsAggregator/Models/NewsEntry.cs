@@ -14,9 +14,8 @@ namespace NewsAggregator.Models
         public List<string> Tags { get; set; }
         public string SourceUrl { get; private set; }
         public BsonDateTime TimeSourcePublished { get; private set; }
-        [BsonIgnore]
+        public string EnglishText { get; set; }
         public List<string> KeyWords { get; set; }
-        [BsonIgnore]
         public List<string> DuplicateUrls { get; set; }
     }
 }

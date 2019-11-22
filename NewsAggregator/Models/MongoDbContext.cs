@@ -10,7 +10,7 @@ namespace NewsAggregator.Models
 
         public MongoDbContext()
         {
-            var client = new MongoClient("mongodb+srv://reader:reader-pass-123@cluster0-kgt9l.azure.mongodb.net/test?retryWrites=true&w=majority");
+            var client = new MongoClient("mongodb+srv://writer:writer-pass-123@cluster0-kgt9l.azure.mongodb.net/test?retryWrites=true&w=majority");
             _mongoDb = client.GetDatabase("News");
             _news = new List<IMongoCollection<NewsEntry>>();
         }
@@ -28,6 +28,14 @@ namespace NewsAggregator.Models
                 _news.Add(_mongoDb.GetCollection<NewsEntry>("bbc.com/ukrainian/news"));
 
                 return _news;
+            }
+        }
+
+        public List<string> CollectionNames
+        {
+            get
+            {
+                return _mongoDb.ListCollectionNamesAsync().Result.ToList();
             }
         }
     }

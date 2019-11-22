@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,29 @@ namespace NewsAggregator.Models
         {
             try
             {
+                await UpdateNews();
                 return await NewsHelper.GetRecentNews(db.News);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task UpdateNews()
+        {
+            try
+            {
+                var updatedNews = await NewsHelper.AnalyseNewsAsync(db.News);
+
+                foreach(var newsEntry in updatedNews)
+                {
+                    for (int idx = 0; idx < db.News.Count; ++idx)
+                    {
+                        await db.News[idx].ReplaceOneAsync(
+                            n => n.Id == newsEntry.Id, newsEntry);
+                    }
+                }
             }
             catch
             {
