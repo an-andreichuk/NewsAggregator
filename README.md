@@ -21,6 +21,7 @@
         ],
         "SourceUrl": "string",
         "TimeSourcePublished": BsonDate,
+        "EnglishText": "string",
         "KeyWords": [
             "string"
         ],
