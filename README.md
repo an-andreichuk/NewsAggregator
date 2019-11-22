@@ -40,7 +40,7 @@
 Надо сделать что-то красивенькое из имеющихся данных :)
 
 ## Бэкенд
-В [`NewsRepository.cs`][NewsRepository.cs] есть заглушка для анализа.  
+В [`NewsHelper.cs`][NewsHelper.cs] есть заглушка для анализа.  
 
 Планы:
 1.  выделять из текста новости ключевые слова  
@@ -48,4 +48,4 @@
 3.  ...
 
 
-[NewsRepository.cs]: https://github.com/an-andreichuk/NewsAggregator/blob/master/NewsAggregator/Models/NewsRepository.cs
+[NewsHelper.cs]: https://github.com/an-andreichuk/NewsAggregator/blob/master/NewsAggregator/Models/NewsHelper.cs
