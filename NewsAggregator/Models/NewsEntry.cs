@@ -17,5 +17,6 @@ namespace NewsAggregator.Models
         public string EnglishText { get; set; }
         public List<string> KeyWords { get; set; }
         public List<string> DuplicateUrls { get; set; }
+        public string Sentiment {get; set; } 
     }
 }

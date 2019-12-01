@@ -7,6 +7,7 @@
 <div>
     <h4>@Html.DisplayFor(model => model.Title)</h4>
     <p> @Html.DisplayFor(model => model.TimeSourcePublished.Value) </p>
+    <p>Рівень позитиву: @Html.DisplayFor(model => model.Sentiment)</p>
     <hr />
     <p style="white-space: pre-line">@Model.Text</p>
 
