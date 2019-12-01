@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Collections;
 using Newtonsoft.Json;
+using System.Threading;
 using NewsAggregator.Utils;
 
 namespace NewsAggregator.Models
@@ -51,11 +52,13 @@ namespace NewsAggregator.Models
                 if (string.IsNullOrEmpty(newsEntry.EnglishText))
                 {
                     newsEntry.EnglishText = new GoogleTranslator().TranslateText(newsEntry.Text, "en");
+                    Thread.Sleep(3000);
                     ++count;
+
                 }
 
-                if (count > 0)  //translates only 1 news per attempt - Rate Limit issue
-                    break;
+                if (count > 1)  //translates only 1 news per attempt - Rate Limit issue
+                    continue;
             }
 
             return translatedNews;
@@ -65,10 +68,18 @@ namespace NewsAggregator.Models
         {
             var res = new List<NewsEntry>();
 
+
+            var today = System.DateTime.Today;
+            var yesterday = today.AddHours(-10.0);
+            var filterBuilder = Builders<NewsEntry>.Filter;
+
+            var filter = filterBuilder.Gte(x => x.TimeSourcePublished, yesterday) &
+                          filterBuilder.Lte(x => x.TimeSourcePublished, today);
+
             foreach (var newsCollection in allNews)
             {
                 res.InsertRange(res.Count,
-                    await newsCollection.Find(_ => true).ToListAsync());
+                    await newsCollection.Find(filter).ToListAsync());
             }
 
             return res;
