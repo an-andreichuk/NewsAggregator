@@ -65,14 +65,5 @@ namespace NewsAggregator.Models
             }
         }
 
-        public Task<ActionResult> Create(NewsEntry entry)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ActionResult> Update(string id, NewsEntry entry)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

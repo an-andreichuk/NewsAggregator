@@ -8,7 +8,5 @@ namespace NewsAggregator.Models
     {
         Task<IEnumerable<NewsEntry>> GetAllNews();
         Task<NewsEntry> GetNewsEntry(string id);
-        Task<ActionResult> Create(NewsEntry entry);
-        Task<ActionResult> Update(string id, NewsEntry entry);
     }
 }
