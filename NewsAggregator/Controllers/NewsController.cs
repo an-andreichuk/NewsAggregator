@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace NewsAggregator.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class NewsController : Controller
     {
