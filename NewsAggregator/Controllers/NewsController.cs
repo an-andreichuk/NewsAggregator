@@ -7,17 +7,21 @@ using Microsoft.AspNetCore.Http;
 
 namespace NewsAggregator.Controllers
 {
+    [Route("news/[controller]")]
+    [ApiController]
     public class NewsController : Controller
     {
-        
         private readonly INewsRepository _dataAccessProvider = new NewsRepository();
-        public async Task<ActionResult> Index()
+
+        [HttpGet]
+        public async Task<ActionResult> Get()
         {
             IEnumerable<NewsEntry> allNews = await _dataAccessProvider.GetAllNews();
             return View(allNews);
         }
 
-        public async Task<ActionResult> Details(string id)
+        [HttpGet("{id:length(24)}", Name = "GetNews")]
+        public async Task<ActionResult> Get(string id)
         {
             if (id == null)
             {

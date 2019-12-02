@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -63,5 +64,6 @@ namespace NewsAggregator.Models
                 throw;
             }
         }
+
     }
 }
