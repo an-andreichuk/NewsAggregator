@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -62,6 +63,16 @@ namespace NewsAggregator.Models
             {
                 throw;
             }
+        }
+
+        public Task<ActionResult> Create(NewsEntry entry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ActionResult> Update(string id, NewsEntry entry)
+        {
+            throw new NotImplementedException();
         }
     }
 }
