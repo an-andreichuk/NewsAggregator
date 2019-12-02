@@ -68,7 +68,7 @@ namespace NewsAggregator
 
             app.UseHangfireServer();
             app.UseHangfireDashboard();
-
+     
             RecurringJob.AddOrUpdate(
                 () => Console.WriteLine("Recurring!"), //call script instead
                 Cron.Minutely);
