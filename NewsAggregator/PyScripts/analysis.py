@@ -105,6 +105,30 @@ class NewsAnalyser:
 
         return news
 
+    def translateTextToEnglish(self, news):
+        """
+        Translates Ukrainian to English
+        :param news: list of dictionaries
+        :return: modified input list of dictionaries
+        """
+
+        if len(news) == 0:
+            print("empty news")
+            return []
+
+        algo = self.client.algo('translation/GoogleTranslate/0.1.1')
+        algo.set_options(timeout=100)  # optional
+
+        for entry in news:
+            if "EnglishText" not in entry or entry["EnglishText"] is None:
+                input = {
+                    "action": "translate",
+                    "text": entry['Text']
+                    }
+                entry['EnglishText'] = algo.pipe(input).result["translation"]
+
+        return news
+
     def translateSummaryToUkr(self, news):
         """
         Translates EnglishSummary to Ukrainian
