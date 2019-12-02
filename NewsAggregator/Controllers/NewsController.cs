@@ -20,7 +20,7 @@ namespace NewsAggregator.Controllers
             return View(allNews);
         }
 
-        [HttpGet("{id:length(24)}", Name = "GetNews")]
+        [HttpGet("{id:length(24)}")]
         public async Task<ActionResult> Get(string id)
         {
             if (id == null)
