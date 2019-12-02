@@ -61,7 +61,7 @@ namespace NewsAggregator
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "api/{controller=News}/{id?}"
+                    template: "{controller=news}/{id?}"
                     );
             });
 
