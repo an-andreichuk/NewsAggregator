@@ -1,6 +1,18 @@
 # -*- coding: utf8 -*-
 import Algorithmia
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import spacy
+spacy.load('en')
+from spacy.lang.en import English
+import nltk
+nltk.download('wordnet')
+from nltk.corpus import wordnet as wn
+from nltk.stem.wordnet import WordNetLemmatizer
+nltk.download('stopwords')
+en_stop = set(nltk.corpus.stopwords.words('english'))
+import random
+import gensim
+from gensim import corpora
 
 
 class NewsAnalyser:
@@ -153,6 +165,78 @@ class NewsAnalyser:
                 entry['UkrSummary'] = algo.pipe(input).result["translation"]
 
         return news
+
+
+class LDA:
+    def __init__(self):
+        self.NUM_TOPICS = 5
+        self.parser = English()
+        self.dictionary = None
+        self.ldamodel = None
+
+    def tokenize(self, text):
+        lda_tokens = []
+        tokens = self.parser(text)
+        for token in tokens:
+            if token.orth_.isspace():
+                continue
+            elif token.like_url:
+                lda_tokens.append('URL')
+            elif token.orth_.startswith('@'):
+                lda_tokens.append('SCREEN_NAME')
+            else:
+                lda_tokens.append(token.lower_)
+        return lda_tokens
+
+    def get_lemma(self, word):
+        lemma = wn.morphy(word)
+        if lemma is None:
+            return word
+        else:
+            return lemma
+
+    def get_lemma2(self, word):
+        return WordNetLemmatizer().lemmatize(word)
+
+    def prepare_text_for_lda(self, text):
+        tokens = self.tokenize(text)
+        tokens = [token for token in tokens if len(token) > 4]
+        tokens = [token for token in tokens if token not in en_stop]
+        tokens = [self.get_lemma(token) for token in tokens]
+        return tokens
+
+    def prepareDictionary(self):
+        text_data = []
+        with open('dataset.csv') as f:
+            for line in f:
+                tokens = self.prepare_text_for_lda(line)
+                if random.random() > .99:
+                    print(tokens)
+                    text_data.append(tokens)
+
+        self.dictionary = corpora.Dictionary(text_data)
+        corpus = [self.dictionary.doc2bow(text) for text in text_data]
+        import pickle
+        pickle.dump(corpus, open('corpus.pkl', 'wb'))
+        self.dictionary.save('dictionary.gensim')
+
+        self.ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=self.NUM_TOPICS, id2word=self.dictionary, passes=15)
+        self.ldamodel.save('model5.gensim')
+
+        topics = self.ldamodel.print_topics(num_words=4)
+        for topic in topics:
+            print(topic)
+
+    def getTopics(self, new_doc):
+        if self.dictionary is None or self.ldamodel is None:
+            self.prepareDictionary()
+
+        new_doc = self.prepare_text_for_lda(new_doc)
+        new_doc_bow = self.dictionary.doc2bow(new_doc)
+        topics = self.ldamodel.get_document_topics(new_doc_bow)
+        print(topics)
+        return topics
+
 
 
 if __name__ == "__main__":
