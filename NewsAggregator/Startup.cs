@@ -22,13 +22,13 @@ namespace NewsAggregator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHangfire(config =>
-            {
-                config.UseMongoStorage(
-                    "mongodb+srv://writer:writer-pass-123@cluster0-kgt9l.azure.mongodb.net/test?retryWrites=true&w=majority",
-                    "HangfireDatabase"
-                    );
-            });
+           // services.AddHangfire(config =>
+           // {
+              //  config.UseMongoStorage(
+              //      "mongodb+srv://writer:writer-pass-123@cluster0-kgt9l.azure.mongodb.net/test?retryWrites=true&w=majority",
+              //      "HangfireDatabase"
+              //      );
+           // });
  
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -61,17 +61,17 @@ namespace NewsAggregator
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=news}/{id?}"
+                    template: "{controller=News}/{action=Get}/{id?}"
                     );
             });
 
 
-            app.UseHangfireServer();
-            app.UseHangfireDashboard();
+          //  app.UseHangfireServer();
+          //  app.UseHangfireDashboard();
      
-            RecurringJob.AddOrUpdate(
-                () => Console.WriteLine("Recurring!"), //call script instead
-                Cron.Minutely);
+          //  RecurringJob.AddOrUpdate(
+          //      () => Console.WriteLine("Recurring!"), //call script instead
+          //      Cron.Minutely);
         }
     }
 }
