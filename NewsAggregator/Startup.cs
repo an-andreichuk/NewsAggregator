@@ -61,7 +61,7 @@ namespace NewsAggregator
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=news}/{id?}"
+                    template: "{controller=News}/{action=Get}/{id?}"
                     );
             });
 
@@ -69,9 +69,9 @@ namespace NewsAggregator
             app.UseHangfireServer();
             app.UseHangfireDashboard();
      
-            RecurringJob.AddOrUpdate(
-                () => Console.WriteLine("Recurring!"), //call script instead
-                Cron.Minutely);
+          //  RecurringJob.AddOrUpdate(
+          //      () => Console.WriteLine("Recurring!"), //call script instead
+          //      Cron.Minutely);
         }
     }
 }

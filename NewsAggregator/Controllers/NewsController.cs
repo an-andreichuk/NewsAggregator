@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace NewsAggregator.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
+ 
     public class NewsController : Controller
     {
         private readonly INewsRepository _dataAccessProvider = new NewsRepository();
