@@ -30,67 +30,70 @@ list_links = []
 list_titles = []
 
 for n in np.arange(0, number_of_articles):
-
-    # Getting the link of the article
-    link = coverpage_news[n]['href']
-    link = surl + link
-    print(link)
-    list_links.append(link)
-    SourceUrl = link
-
-    # Getting the title
-    Title = coverpage_news[n].get_text()
-    list_titles.append(Title)
-
-    # Reading the content (it is divided in paragraphs)
-    article = requests.get(link)
-    article_content = article.content
-    soup_article = BeautifulSoup(article_content, 'html5lib')
-    body = soup_article.find_all('div', class_="article_text")
-    x = body[0].find_all('p')
-
-    # Getting he tags
-    tag_list = soup_article.find_all('div', class_="tags")
-    t = tag_list[1].find_all('a')
-    Tags = []
-    for i in np.arange(0, len(t)):
-        Tags.append(t[i].get_text())
-
-    # Getting time & date
-    TimeSourcePublished = soup_article.time["datetime"]
-
-    list_paragraphs = ''
-    final_article = ''
- 
- 
-    for p in np.arange(0, len(x)):
-        paragraph = x[p].get_text()
-        
-        list_paragraphs += paragraph
-        
-        final_article += list_paragraphs
-
-
     
-    news_contents += final_article
-    Text = news_contents
-    
+    try:
+        # Getting the link of the article
+        link = coverpage_news[n]['href']
+        link = surl + link
+        print(link)
+        list_links.append(link)
+        SourceUrl = link
 
-    EnglishText = ''
-    KeyWords = ''
-    Duplicates = ''
+        # Getting the title
+        Title = coverpage_news[n].get_text()
+        list_titles.append(Title)
 
-    result = {
-    "Title": Title,
-    "Text": Text,
-    "Tags": Tags,
-    "SourceUrl": SourceUrl,
-    "TimeSourcePublished": TimeSourcePublished,
-    "EnglishText": EnglishText,
-    "KeyWords": KeyWords,
-    "Duplicates": Duplicates
-    }
+        # Reading the content (it is divided in paragraphs)
+        article = requests.get(link)
+        article_content = article.content
+        soup_article = BeautifulSoup(article_content, 'html5lib')
+        body = soup_article.find_all('div', class_="article_text")
+        x = body[0].find_all('p')
 
-    mycol.insert_one(result)
+        # Getting he tags
+        tag_list = soup_article.find_all('div', class_="tags")
+        t = tag_list[1].find_all('a')
+        Tags = []
+        for i in np.arange(0, len(t)):
+            Tags.append(t[i].get_text())
+
+        # Getting time & date
+        TimeSourcePublished = soup_article.time["datetime"]
+
+        list_paragraphs = ''
+        final_article = ''
+
+
+        for p in np.arange(0, len(x)):
+            paragraph = x[p].get_text()
+
+            list_paragraphs += paragraph
+
+            final_article += list_paragraphs
+
+
+
+        news_contents += final_article
+        Text = news_contents
+
+
+        EnglishText = ''
+        KeyWords = ''
+        Duplicates = ''
+
+        result = {
+        "Title": Title,
+        "Text": Text,
+        "Tags": Tags,
+        "SourceUrl": SourceUrl,
+        "TimeSourcePublished": TimeSourcePublished,
+        "EnglishText": EnglishText,
+        "KeyWords": KeyWords,
+        "Duplicates": Duplicates
+        }
+
+        mycol.insert_one(result)
+    except: 
+        pass
 
 
