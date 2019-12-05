@@ -1,6 +1,6 @@
-
 import requests
 from bs4 import BeautifulSoup as bs
+from newspaper import Article
 from pymongo import MongoClient
 from threading import Thread
 import time
